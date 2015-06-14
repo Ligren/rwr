@@ -1,0 +1,277 @@
+applicants:
+
+    - !!models.Applicant
+        id:     1
+        name: John Smith
+        dateInterview: 2015-08-23
+
+    - !!models.Applicant
+        id:     2
+        name:   Mickey Mouse
+        dateInterview: 2015-09-23
+
+    - !!models.Applicant
+        id:     3
+        name:   Carl Barks
+        dateInterview: 2015-08-29
+
+    - !!models.Applicant
+        id:     4
+        name:   Don Rosa
+        dateInterview: 2015-08-03
+
+    - !!models.Applicant
+        id:     5
+        name:   Goofy
+        dateInterview: 2019-01-07
+
+    - !!models.Applicant
+        id:     6
+        name:   Pluto
+        dateInterview: 2016-01-01
+
+    - !!models.Applicant
+        id:     7
+        name:   Arizona Goof
+        dateInterview: 2015-08-23
+
+    - !!models.Applicant
+        id:     8
+        name:   Grandma Duck
+        dateInterview: 2015-08-23
+
+    - !!models.Applicant
+        id:     9
+        name:   Gladstone Gander
+        dateInterview: 2015-08-23
+
+    - !!models.Applicant
+        id:     10
+        name:   Fethry Duck
+        dateInterview: 2015-08-23
+
+    - !!models.Applicant
+        id:     11
+        name:   Daisy Duck
+        dateInterview: 2015-08-23
+
+    - !!models.Applicant
+        id:     12
+        name:   Scrooge McDuck
+        dateInterview: 2015-08-23
+
+    - !!models.Applicant
+        id:     13
+        name:   Ludwig von Drake
+        dateInterview: 2015-08-23
+
+skills:
+    - !!models.Skill
+        id:     1
+        name:   MySQL
+
+    - !!models.Skill
+        id:     2
+        name:   Java
+
+    - !!models.Skill
+        id:     3
+        name:   C++
+
+    - !!models.Skill
+        id:     8
+        name:   C#
+
+    - !!models.Skill
+        id:     4
+        name:   JS
+
+    - !!models.Skill
+        id:     5
+        name:   JUnit
+
+    - !!models.Skill
+        id:     6
+        name:   Mockito
+
+    - !!models.Skill
+        id:     7
+        name:   Spring Boot
+
+
+ratings:
+    - !!models.Rating
+        id:     1
+        value:  5
+        owner: !!models.Applicant
+                        id: 1
+        skill: !!models.Skill
+                        id: 1
+    - !!models.Rating
+        id:     2
+        value:  3
+        owner: !!models.Applicant
+                        id: 1
+        skill: !!models.Skill
+                        id: 2
+    - !!models.Rating
+        id:     3
+        value:  7
+        owner: !!models.Applicant
+                        id: 1
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     4
+        value:  10
+        owner: !!models.Applicant
+                        id: 1
+        skill: !!models.Skill
+                        id: 4
+    - !!models.Rating
+        id:     5
+        value:  2
+        owner: !!models.Applicant
+                        id: 1
+        skill: !!models.Skill
+                        id: 5
+    - !!models.Rating
+        id:     6
+        value:  1
+        owner: !!models.Applicant
+                        id: 1
+        skill: !!models.Skill
+                        id: 6
+    - !!models.Rating
+        id:     7
+        value:  8
+        owner: !!models.Applicant
+                        id: 1
+        skill: !!models.Skill
+                        id: 7
+    - !!models.Rating
+        id:     8
+        value:  9
+        owner: !!models.Applicant
+                        id: 2
+        skill: !!models.Skill
+                        id: 5
+    - !!models.Rating
+        id:     9
+        value:  3
+        owner: !!models.Applicant
+                        id: 3
+        skill: !!models.Skill
+                        id: 6
+    - !!models.Rating
+        id:     10
+        value:  3
+        owner: !!models.Applicant
+                        id: 2
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     11
+        value:  3
+        owner: !!models.Applicant
+                        id: 1
+        skill: !!models.Skill
+                        id: 7
+    - !!models.Rating
+        id:     12
+        value:  5
+        owner: !!models.Applicant
+                        id: 4
+        skill: !!models.Skill
+                        id: 7
+    - !!models.Rating
+        id:     13
+        value:  1
+        owner: !!models.Applicant
+                        id: 5
+        skill: !!models.Skill
+                        id: 1
+    - !!models.Rating
+        id:     14
+        value:  2
+        owner: !!models.Applicant
+                        id: 6
+        skill: !!models.Skill
+                        id: 2
+    - !!models.Rating
+        id:     15
+        value:  3
+        owner: !!models.Applicant
+                        id: 7
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     16
+        value:  3
+        owner: !!models.Applicant
+                        id: 8
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     17
+        value:  3
+        owner: !!models.Applicant
+                        id: 9
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     18
+        value:  3
+        owner: !!models.Applicant
+                        id: 10
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     19
+        value:  3
+        owner: !!models.Applicant
+                        id: 11
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     20
+        value:  3
+        owner: !!models.Applicant
+                        id: 12
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     21
+        value:  3
+        owner: !!models.Applicant
+                        id: 13
+        skill: !!models.Skill
+                        id: 3
+    - !!models.Rating
+        id:     22
+        value:  3
+        owner: !!models.Applicant
+                        id: 10
+        skill: !!models.Skill
+                        id: 8
+    - !!models.Rating
+        id:     23
+        value:  3
+        owner: !!models.Applicant
+                        id: 9
+        skill: !!models.Skill
+                        id: 2
+    - !!models.Rating
+        id:     24
+        value:  3
+        owner: !!models.Applicant
+                        id: 7
+        skill: !!models.Skill
+                        id: 1
+    - !!models.Rating
+        id:     25
+        value:  3
+        owner: !!models.Applicant
+                        id: 9
+        skill: !!models.Skill
+                        id: 6
