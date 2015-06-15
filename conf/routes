@@ -3,20 +3,25 @@
 # ~~~~
 
 # Home page
-#GET        /                        controllers.Application.index()
-GET        /                controllers.Application.indexApplicants()
-#GET        /indexApp                controllers.Application.indexApplicants()
+GET         /                             controllers.Application.indexApplicants()
 
 # Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                 controllers.Assets.at(path="/public", file)
 
-GET        /assets/*file            controllers.Assets.at(path="/public", file)
+GET         /searchApplicants             controllers.Application.listApplicants()
 
-#GET        /search                  controllers.Application.list()
+GET         /addSkill                     controllers.Application.addSkill()
 
-GET        /searchApplicants        controllers.Application.listApplicants()
-GET        /addSkill                controllers.Application.addSkill()
-GET        /getSkills                controllers.Application.getSkills()
-#POST        /getSkills                controllers.Application.getSkills()
+GET         /addTypeContact               controllers.Application.addTypeContact()
 
-GET        /applicants/edit/:id    controllers.Application.edit(id: Integer)
-POST        /newApplicant                   controllers.Application.newApplicant()
+GET         /getSkills                    controllers.Application.getSkills()
+
+GET         /getTypeContacts              controllers.Application.getTypeContacts()
+
+GET         /applicants/edit/:id          controllers.Application.editApplicant(id: Integer)
+
+GET         /applicants/delete/:id        controllers.Application.deleteApplicant(id: Integer)
+
+POST        /newApplicant                 controllers.Application.createApplicant()
+
+GET         /newApplicant                 controllers.Application.newApplicant()

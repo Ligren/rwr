@@ -16,14 +16,22 @@ import com.avaje.ebean.*;
 public class Contact extends Model {
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Integer id;
 
 	@Constraints.Required
-	public String name;
+	public String value;
 
-	public String title;
-	public String email;
+	@ManyToOne
+	public TypeContact typeContact;
+
+	@ManyToOne
+	public Applicant owner;
+
+//	public String name;
+
+//	public String title;
+//	public String email;
 
 	public static Model.Finder<Long,Contact> find = new Model.Finder(Long.class, Contact.class);
 
@@ -31,15 +39,9 @@ public class Contact extends Model {
 		return find.all();
 	}
 
-	public String toString() {
-		return name;
-	}
-///////////////////////////////////////
-	@ManyToOne
-	public TypeContact typeContact;
+//	public String toString() {
+//		return ;
+//	}
 
-	@ManyToOne
-	public Applicant owner;
 
-	public String value;
 }

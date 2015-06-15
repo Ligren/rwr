@@ -30,18 +30,14 @@ public class Applicant extends Model {
     @Constraints.Required
     public String name;
 
-//    @Version
     @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern="dd/MM/yyyy")
     @CreatedTimestamp
     @Column(updatable=false)
     public Date dateAddition;
-//    public String dateAddition;
-//    public java.sql.Timestamp dateAddition;
 
     @Constraints.Required
     @Formats.DateTime(pattern="dd/MM/yyyy")
-//    public String dateInterview;
     public Date dateInterview;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="owner")
@@ -55,6 +51,25 @@ public class Applicant extends Model {
     public static List<Applicant> all() { return find.all(); }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Applicant applicant = (Applicant) o;
+
+        return !(id != null ? !id.equals(applicant.id) : applicant.id != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Applicant{" +
                 "id=" + id +
@@ -65,26 +80,4 @@ public class Applicant extends Model {
                 ", ratings=" + ratings +
                 '}';
     }
-
-    /*
-// Find all tasks
-List<Task> tasks = Task.find.all();
-
-// Find a task by ID
-Task anyTask = Task.find.byId(34L);
-
-// Delete a task by ID
-Task.find.ref(34L).delete();
-
-// More complex task query
-List<Task> cocoTasks = Task.find.where()
-        .ilike("name", "%coco%")
-        .orderBy("dueDate asc")
-        .findPagedList(1, 25)
-        .getList();
-		
----------------------------------------------		
-		
-	*/
-
 }

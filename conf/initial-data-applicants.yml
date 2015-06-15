@@ -275,3 +275,71 @@ ratings:
                         id: 9
         skill: !!models.Skill
                         id: 6
+
+typeContacts:
+
+    - !!models.TypeContact
+        id:     1
+        name: telephone
+
+    - !!models.TypeContact
+        id:     2
+        name:   Skype
+
+    - !!models.TypeContact
+        id:     3
+        name:   E-mail
+
+    - !!models.TypeContact
+        id:     4
+        name:   Viber
+
+    - !!models.TypeContact
+        id:     5
+        name:   icq
+
+    - !!models.TypeContact
+        id:     6
+        name:   Рельса
+
+contacts:
+
+    - !!models.Contact
+        id:     1
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 1
+        typeContact: !!models.TypeContact
+                        id: 1
+
+    - !!models.Contact
+        id:     2
+        value:  sadkoua@gmail.com
+        owner: !!models.Applicant
+                        id: 1
+        typeContact: !!models.TypeContact
+                        id: 2
+
+    - !!models.Contact
+        id:     3
+        value:  sadkoua@gmail.com
+        owner: !!models.Applicant
+                        id: 1
+        typeContact: !!models.TypeContact
+                        id: 3
+
+    - !!models.Contact
+        id:     4
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 1
+        typeContact: !!models.TypeContact
+                        id: 4
+
+    - !!models.Contact
+        id:     5
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 2
+        typeContact: !!models.TypeContact
+                        id: 6

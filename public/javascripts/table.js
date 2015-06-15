@@ -7,6 +7,7 @@ http://www.datatables.net/forums/discussion/9966/want-to-have-a-edit-and-delete-
 http://www.pixelcom.crimea.ua/rabota-s-jquery-datatables.html
 */
 var skillNumber = 0;
+var contactNumber = 0;
 
 $(function() {
     //$( ".datepicker" ).datepicker({ dateFormat: "dd-mm-yy" });
@@ -163,7 +164,7 @@ function getSkills() {
                 selectList.setAttribute("onchange", "newSkill(this)");
 
                 var option = document.createElement("option");
-                option.value = 0;
+                //option.value = 0;
                 option.text = 'select skill';
                 selectList.appendChild(option);
 
@@ -171,12 +172,12 @@ function getSkills() {
                 option.value = -1;
                 option.text = 'new skill';
                 selectList.appendChild(option);
-
+                console.log("in add = " + req.responseText);
                 var skillsArray = JSON.parse(req.responseText).skills;
                 for (var i = 0; i < skillsArray.length; i++) {
                     var option = document.createElement("option");
                     option.value = skillsArray[i].id;
-                    option.text = skillsArray[i].name + ', id = ' + skillsArray[i].id;
+                    option.text = skillsArray[i].name;
                     selectList.appendChild(option);
                 }
 
@@ -199,7 +200,52 @@ function getSkills() {
     statusElem.innerHTML = 'Ожидаю ответа сервера...'
 }
 
-// javascript-код голосования из примера
+function getContacts() {
+    var req = getXmlHttp();
+    var statusElem = document.getElementById('vote_status')
+    req.onreadystatechange = function () {
+        if (req.readyState == 4) {
+            statusElem.innerHTML = req.statusText
+            if (req.status == 200) {
+
+                var fieldset = document.createElement("fieldset");
+                fieldset.setAttribute("id", "contactFieldsetId-" + (++contactNumber));
+
+                var myDiv = document.getElementById("contact");
+                myDiv.appendChild(fieldset);
+
+                var selectList = document.createElement("select");
+                selectList.id = contactNumber;
+                selectList.name = "contactNameId-" + contactNumber;
+                selectList.setAttribute("onchange", "newContact(this)");
+
+                var option = document.createElement("option");
+                option.value = 0;
+                option.text = 'select contact';
+                selectList.appendChild(option);
+
+                var option = document.createElement("option");
+                option.value = -1;
+                option.text = 'new contact';
+                selectList.appendChild(option);
+                //console.log("in add = " + req.responseText);
+                var typeContactsArray = JSON.parse(req.responseText).typeContacts;
+                for (var i = 0; i < typeContactsArray .length; i++) {
+                    var option = document.createElement("option");
+                    option.value = typeContactsArray [i].id;
+                    option.text = typeContactsArray [i].name;
+                    selectList.appendChild(option);
+                }
+
+                fieldset.appendChild(selectList);
+            }
+        }
+    }
+    req.open('GET', '/getTypeContacts', true);
+    req.send(null);  // отослать запрос
+    statusElem.innerHTML = 'Ожидаю ответа сервера...'
+}
+
 function newSkill(data) {
     if (data.value == "-1") {
         var newSkill = prompt('Enter new skill', '');
@@ -249,8 +295,61 @@ function newSkill(data) {
     }
 }
 
+function newContact(data) {
+    if (data.value == "-1") {
+        var newContact = prompt('Enter new type contact', '');
+        var req = getXmlHttp();
+        //var statusElem = document.getElementById('vote_status')
+
+        req.onreadystatechange = function () {
+            if (req.readyState == 4) {
+                //statusElem.innerHTML = req.statusText // показать статус (Not Found, ОК..)
+                if (req.status == 200) {
+                    if (JSON.parse(req.responseText).createNewTypeContact == "true") {
+                        alert("Тип контакта: " + newContact + " Успешно добавлен !");
+                        deleteContact(data.id);
+                    } else {
+                        alert("Тип контакта: " + newContact + " Уже существует !");
+                    }
+                }
+            }
+        }
+        req.open('GET', '/addTypeContact?newTypeContact=' + newContact, true);
+        req.send(null);
+        statusElem.innerHTML = 'Ожидаю ответа сервера...';
+    } else {
+        if (data.value > 0) {
+            console.log(document.getElementById('contactValueId-' + contactNumber));
+            if (!document.getElementById('contactValueId-' + contactNumber)) {
+                var typeContactValue = document.createElement("input");
+                typeContactValue.type = 'text';
+                //typeContactValue.value = 5;
+                typeContactValue.name = 'contactValueName-' + contactNumber;
+                typeContactValue.id = 'contactValueId-' + contactNumber;
+                //typeContactValue.min = 0;
+                //typeContactValue.max = 10;
+                //typeContactValue.step = 1;
+                var selectList = document.getElementById("contactFieldsetId-" + contactNumber);
+                selectList.appendChild(typeContactValue);
+
+                var buttonDelete = document.createElement("input");
+                buttonDelete.type = "button";
+                buttonDelete.name = contactNumber;
+                buttonDelete.value = "Delete contact";
+                buttonDelete.setAttribute("onclick", "deleteContact(" + contactNumber + ")");
+                selectList.appendChild(buttonDelete);
+            }
+        }
+    }
+}
+
 function deleteSkill(numberDeleteRow) {
     var deleteRow = document.getElementById('skillFieldsetId-' + numberDeleteRow);
+    deleteRow.parentNode.removeChild(deleteRow);
+}
+
+function deleteContact(numberDeleteRow) {
+    var deleteRow = document.getElementById('contactFieldsetId-' + numberDeleteRow);
     deleteRow.parentNode.removeChild(deleteRow);
 }
 
@@ -273,4 +372,81 @@ function getXmlHttp() {
         xmlhttp = new XMLHttpRequest();
     }
     return xmlhttp;
+}
+
+function loadApplicant(message) {
+    if (message.name != undefined) {
+        var selectInput = document.getElementById("nameInput");
+        selectInput.setAttribute('value', message.name);
+        selectInput = document.getElementById("dateInput");
+        selectInput.setAttribute('value', message.dateInterview);
+        var req = getXmlHttp();
+        req.onreadystatechange = function () {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+
+                    var ownSkillsArray = message.ratings;
+                    for (var i = 0; i < ownSkillsArray.length; i++) {
+                        var option = document.createElement("option");
+                        console.log('skill = ' + ownSkillsArray[i].skill + ', rating ' + ownSkillsArray[i].rating + ', id skill = ' + ownSkillsArray[i].id);
+
+                        var fieldset = document.createElement("fieldset");
+                        fieldset.setAttribute("id", "skillFieldsetId-" + (++skillNumber));
+
+                        var myDiv = document.getElementById("skill");
+                        myDiv.appendChild(fieldset);
+
+                        var selectList = document.createElement("select");
+                        selectList.id = skillNumber;
+                        selectList.name = "skillNameId-" + skillNumber;
+                        selectList.setAttribute("onchange", "newSkill(this)");
+
+                        var option = document.createElement("option");
+                        option.value = 0;
+                        option.text = 'select skill';
+                        selectList.appendChild(option);
+
+                        var option = document.createElement("option");
+                        option.value = -1;
+                        option.text = 'new skill';
+                        selectList.appendChild(option);
+
+                        var skillsArray = JSON.parse(req.responseText).skills;
+                        for (var a = 0; a < skillsArray.length; a++) {
+                            var option = document.createElement("option");
+                            option.value = skillsArray[a].id;
+                            option.text = skillsArray[a].name;
+                            selectList.appendChild(option);
+                        }
+                        fieldset.appendChild(selectList);
+
+                        document.getElementById(skillNumber).value = ownSkillsArray[i].id;
+
+                        var skillValue = document.createElement("input");
+                        skillValue.type = 'number';
+                        skillValue.value = 5;
+                        skillValue.name = 'skillValueName-' + skillNumber;
+                        skillValue.id = 'skillValueId-' + skillNumber;
+                        skillValue.min = 0;
+                        skillValue.max = 10;
+                        skillValue.step = 1;
+                        var selectList = document.getElementById("skillFieldsetId-" + skillNumber);
+                        selectList.appendChild(skillValue);
+
+                        document.getElementById('skillValueId-' + skillNumber).value = ownSkillsArray[i].rating;
+
+                        var buttonDelete = document.createElement("input");
+                        buttonDelete.type = "button";
+                        buttonDelete.name = skillNumber;
+                        buttonDelete.value = "Delete skill";
+                        buttonDelete.setAttribute("onclick", "deleteSkill(" + skillNumber + ")");
+                        selectList.appendChild(buttonDelete);
+
+                    }
+                }
+            }
+        }
+        req.open('GET', '/getSkills', true);
+        req.send(null);
+    }
 }

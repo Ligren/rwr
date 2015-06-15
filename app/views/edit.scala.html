@@ -1,54 +1,29 @@
 @(message: String)
 
-@main("Play!ing with DataTables") {
-    <h2>Edit</h2>
+    @main("Play!ing with DataTables") {
+        <body onload="loadApplicant(@message)">
+            <h2>Edit</h2>
 
+            <form name="test" method="post" action="/newApplicant" id="formApplicant">
+                <fieldset>
+                    <legend>Applicant</legend>
+                    <p><b>Name:</b><br>
+                        <input type="text" id="nameInput" name="name" size="40" required>
+                    </p>
+                    <p><b>Date interview ('dd/MM/yyyy'):</b><br>
+                        <input type="date" name="dateInterview" id="dateInput" class="datepicker" required>
+                    </p>
+                    <button type="button" onclick="getSkills()">Add skill</button>
+                    <div id="skill"></div>
+                    <button type="button" onclick="getContacts()">Add contact</button>
+                    <div id="contact"></div>
+                    <p><input type="submit" value="Отправить">
+                        <input type="reset" value="Очистить"></p>
+                </fieldset>
+            </form>
 
+            <div id="your-id"></div>
 
-    @*<form name="test" method="post" action="input1.php">*@
-
-
-
-            @*<p>Вы можете разместить на сайте ваш комментарий,*@
-                @*касающийся данной статьи</p>*@
-
-
-
-
-
-    <form name="test" method="post" action="/newApplicant" id="formApplicant">
-
-        <fieldset>
-            <legend>Applicant</legend>
-        <p><b>Name:</b><br>
-            <input type="text" name="name" size="40" required>
-        </p>
-            <p><b>Date interview ('dd/MM/yyyy'):</b><br>
-                <input type="date" name="dateInterview" class="datepicker" required>
-            </p>
-            <button type="button" onclick="getSkills()">Add skill</button>
-            <div id="skill"></div>
-
-            @*<input type="radio" name="browser" value="ie"> Internet Explorer<Br>*@
-
-        @*<p>Комментарий<Br>*@
-            @*<textarea name="comment" cols="40" rows="3"></textarea></p>*@
-        <p><input type="submit" value="Отправить">
-            <input type="reset" value="Очистить"></p>
-        </fieldset>
-    </form>
-
-
-
-    <div id="your-id"></div>
-    @*<input type="hidden" name="result" value="<div id='your-id'></div>">*@
-
-
-
-    @*<body onload="namef (@message)">*@
-
-
-
-    <input value="Голосовать!" onclick="vote()" type="button" />
-    <div id="vote_status">Здесь будет ответ сервера</div>
-}
+            <input value="Голосовать!" onclick="vote()" type="button" />
+            <div id="vote_status">Здесь будет ответ сервера</div>
+    }

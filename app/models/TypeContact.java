@@ -11,6 +11,7 @@ import javax.persistence.*;
 public class TypeContact extends Model {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
     @Constraints.Required
@@ -18,6 +19,12 @@ public class TypeContact extends Model {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="typeContact")
     public List<Contact> contacts;
+
+    public TypeContact(String name) {
+        this.name = name;
+    }
+
+    public TypeContact() { }
 
     public static Finder<Integer, TypeContact> find = new Finder (Integer.class, TypeContact.class);
 

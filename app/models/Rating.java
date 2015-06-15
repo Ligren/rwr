@@ -3,6 +3,7 @@ package models;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Rating extends Model {
@@ -27,6 +28,10 @@ public class Rating extends Model {
     }
 
     public Rating() { }
+
+    public static Finder<Integer, Applicant> find = new Finder (Integer.class, Applicant.class);
+
+    public static List<Applicant> all() { return find.all(); }
 
     @Override
     public String toString() {

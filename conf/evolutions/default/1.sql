@@ -12,13 +12,10 @@ create table APPLICANTS (
 ;
 
 create table contact (
-  id                        bigint not null,
-  name                      varchar(255),
-  title                     varchar(255),
-  email                     varchar(255),
+  id                        integer auto_increment not null,
+  value                     varchar(255),
   type_contact_id           integer,
   owner_id                  integer,
-  value                     varchar(255),
   constraint pk_contact primary key (id))
 ;
 
@@ -37,14 +34,10 @@ create table skill (
 ;
 
 create table type_contact (
-  id                        integer not null,
+  id                        integer auto_increment not null,
   name                      varchar(255),
   constraint pk_type_contact primary key (id))
 ;
-
-create sequence contact_seq;
-
-create sequence type_contact_seq;
 
 alter table contact add constraint fk_contact_typeContact_1 foreign key (type_contact_id) references type_contact (id) on delete restrict on update restrict;
 create index ix_contact_typeContact_1 on contact (type_contact_id);
@@ -72,8 +65,4 @@ drop table if exists skill;
 drop table if exists type_contact;
 
 SET REFERENTIAL_INTEGRITY TRUE;
-
-drop sequence if exists contact_seq;
-
-drop sequence if exists type_contact_seq;
 
