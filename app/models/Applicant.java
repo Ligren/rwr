@@ -24,6 +24,7 @@ import java.util.Set;
 public class Applicant extends Model {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
     @Constraints.Required
@@ -35,10 +36,12 @@ public class Applicant extends Model {
     @CreatedTimestamp
     @Column(updatable=false)
     public Date dateAddition;
+//    public String dateAddition;
 //    public java.sql.Timestamp dateAddition;
 
     @Constraints.Required
     @Formats.DateTime(pattern="dd/MM/yyyy")
+//    public String dateInterview;
     public Date dateInterview;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="owner")
@@ -50,7 +53,20 @@ public class Applicant extends Model {
     public static Finder<Integer, Applicant> find = new Finder (Integer.class, Applicant.class);
 
     public static List<Applicant> all() { return find.all(); }
-/*
+
+    @Override
+    public String toString() {
+        return "Applicant{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", dateAddition=" + dateAddition +
+                ", dateInterview=" + dateInterview +
+                ", contacts=" + contacts +
+                ", ratings=" + ratings +
+                '}';
+    }
+
+    /*
 // Find all tasks
 List<Task> tasks = Task.find.all();
 

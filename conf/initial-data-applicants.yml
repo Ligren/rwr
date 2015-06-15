@@ -3,67 +3,67 @@ applicants:
     - !!models.Applicant
         id:     1
         name: John Smith
-        dateInterview: 2015-08-23
+        dateInterview: 2015-08-10
 
     - !!models.Applicant
         id:     2
         name:   Mickey Mouse
-        dateInterview: 2015-09-23
+        dateInterview: 2015-09-10
 
     - !!models.Applicant
         id:     3
         name:   Carl Barks
-        dateInterview: 2015-08-29
+        dateInterview: 2015-08-12
 
     - !!models.Applicant
         id:     4
         name:   Don Rosa
-        dateInterview: 2015-08-03
+        dateInterview: 2015-08-01
 
     - !!models.Applicant
         id:     5
         name:   Goofy
-        dateInterview: 2019-01-07
+        dateInterview: 2016-08-10
 
     - !!models.Applicant
         id:     6
         name:   Pluto
-        dateInterview: 2016-01-01
+        dateInterview: 2015-03-10
 
     - !!models.Applicant
         id:     7
         name:   Arizona Goof
-        dateInterview: 2015-08-23
+        dateInterview: 2015-02-10
 
     - !!models.Applicant
         id:     8
         name:   Grandma Duck
-        dateInterview: 2015-08-23
+        dateInterview: 2015-01-10
 
     - !!models.Applicant
         id:     9
         name:   Gladstone Gander
-        dateInterview: 2015-08-23
+        dateInterview: 2016-07-10
 
     - !!models.Applicant
         id:     10
         name:   Fethry Duck
-        dateInterview: 2015-08-23
+        dateInterview: 2016-08-13
 
     - !!models.Applicant
         id:     11
         name:   Daisy Duck
-        dateInterview: 2015-08-23
+        dateInterview: 2015-08-10
 
     - !!models.Applicant
         id:     12
         name:   Scrooge McDuck
-        dateInterview: 2015-08-23
+        dateInterview: 2015-08-17
 
     - !!models.Applicant
         id:     13
         name:   Ludwig von Drake
-        dateInterview: 2015-08-23
+        dateInterview: 2015-08-19
 
 skills:
     - !!models.Skill

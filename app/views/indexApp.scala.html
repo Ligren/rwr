@@ -1,17 +1,6 @@
 @(message: String)
 
-@main("Play!ing with DataTables") {
-  <script type="text/javascript">
-  $(document).ready(function() {
-    $('#1contadts').dataTable( {
-        "processing": true,
-        "serverSide": true,
-        "ajax": "@routes.Application.listApplicants()"
-    } );
-} );
-</script>
-
-
+@main("RWR") {
 
   <h2>RedWerk recruting</h2>
 
@@ -27,20 +16,5 @@
         <th>Delete</th>
       </tr>
     </thead>
-
-    @*<tfoot>*@
-      @*<tr>*@
-        @*<th>Name</th>*@
-        @*<th>Date Interview</th>*@
-        @*<th>Date Additional</th>*@
-        @*<th>Skills</th>*@
-        @*<th>Edit</th>*@
-        @*<th>Delete</th>*@
-      @*</tr>*@
-    @*</tfoot>*@
   </table>
 }
-
-@*http://editor.datatables.net/examples/styling/envelopeInTable.html*@
-@*http://www.datatables.net/forums/discussion/9966/want-to-have-a-edit-and-delete-button-added-to-datatable*@
-  @*http://www.pixelcom.crimea.ua/rabota-s-jquery-datatables.html*@

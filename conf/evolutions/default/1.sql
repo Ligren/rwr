@@ -4,7 +4,7 @@
 # --- !Ups
 
 create table APPLICANTS (
-  id                        integer not null,
+  id                        integer auto_increment not null,
   name                      varchar(255),
   date_interview            timestamp,
   date_addition             timestamp not null,
@@ -23,7 +23,7 @@ create table contact (
 ;
 
 create table rating (
-  id                        integer not null,
+  id                        integer auto_increment not null,
   skill_id                  integer,
   owner_id                  integer,
   value                     integer(3) not null,
@@ -42,11 +42,7 @@ create table type_contact (
   constraint pk_type_contact primary key (id))
 ;
 
-create sequence APPLICANTS_seq;
-
 create sequence contact_seq;
-
-create sequence rating_seq;
 
 create sequence type_contact_seq;
 
@@ -77,11 +73,7 @@ drop table if exists type_contact;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 
-drop sequence if exists APPLICANTS_seq;
-
 drop sequence if exists contact_seq;
-
-drop sequence if exists rating_seq;
 
 drop sequence if exists type_contact_seq;
 

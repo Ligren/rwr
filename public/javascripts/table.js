@@ -1,20 +1,16 @@
-//http://shpargalkablog.ru/2013/08/appendchild-removechild-javascript.html
-//http://javascript.ru/tutorial/dom/attributes
-//http://www.wisdomweb.ru/AJAX/object.php
+/*
+http://shpargalkablog.ru/2013/08/appendchild-removechild-javascript.html
+http://javascript.ru/tutorial/dom/attributes
+http://www.wisdomweb.ru/AJAX/object.php
+http://editor.datatables.net/examples/styling/envelopeInTable.html
+http://www.datatables.net/forums/discussion/9966/want-to-have-a-edit-and-delete-button-added-to-datatable
+http://www.pixelcom.crimea.ua/rabota-s-jquery-datatables.html
+*/
 var skillNumber = 0;
 
-/*
- $(document).ready(function() {
- $('#contsacts').dataTable( {
- processing: true,
- serverSide: true,
- ajax: "/searchApplicants"
- } );
- } );
- */
-
 $(function() {
-    $( ".datepicker" ).datepicker({ dateFormat: "dd-mm-yy" });
+    //$( ".datepicker" ).datepicker({ dateFormat: "dd-mm-yy" });
+    $( ".datepicker" ).datepicker({ dateFormat: "dd/mm/yy" });
 });
 
 $(document).ready(function () {
@@ -86,6 +82,7 @@ $(document).ready(function () {
     })
 });
 
+//For right sort date column
 jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     "dateAddition-asc": function (a, b) {
         var dateAdditiona = $.trim(a).split('.');
@@ -136,57 +133,6 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     }
 });
 
-/*
- function namef (data1) {
- console.log("we are in the function");
-
- data = data1;
- console.log("message = " + data + "; typeof = " + (typeof data) //+
- //"; parse = " + JSON.parse(data) //+
- //"; stringify = " + JSON.stringify(""+data)
- );
-
- for (element in data1) {
- console.log("for in element = " + element + " data = " + data1[element]);
- }
- console.log("ratings");
-
- var categoryArray = data1["ratings"];
-
- var table = '<table>';
- for (var i = 0; i < categoryArray.length; i++) {
- table += '<tr><td>';
- table += "id = " + i;
- table += '</td></tr>';
- }
-
- table += '</table>';
- console.log("table = " + table);
- //document.getElementById('your-id').value = table2;
- document.getElementById('your-id').innerHTML = table;
- //console.log("id = " + i + ", value = " + categoryArray[i].skill + ", rating = " + categoryArray[i].rating);
- for (var i = 0; i < categoryArray.length; i++) {
- console.log("id = " + i);
- }
-
- }
-
-function addSkill() {
-    //console.log("add skill" + new Date());
-    var skill = '<fieldset>';
-    skill += '<select>';
-    var skillsArray = [1, 2, 3];
-    for (var i = 0; i < skillsArray.length; i++) {
-        skill += '<option selected = "selected">' + skillsArray [i] + '</option>';
-    }
-    skill += '</select>';
-    skill += '</fieldset>';
-
-    var existing_skills = document.getElementById('skill').innerHTML;
-    document.getElementById('skill').innerHTML = existing_skills + skill;
-}
- */
-
 function getSkills() {
     var req = getXmlHttp();
 
@@ -216,9 +162,6 @@ function getSkills() {
                 selectList.name = "skillNameId-" + skillNumber;
                 selectList.setAttribute("onchange", "newSkill(this)");
 
-                //var myDiv = document.getElementById("formApplicant");
-                //myDiv.appendChild(selectList);
-
                 var option = document.createElement("option");
                 option.value = 0;
                 option.text = 'select skill';
@@ -234,7 +177,6 @@ function getSkills() {
                     var option = document.createElement("option");
                     option.value = skillsArray[i].id;
                     option.text = skillsArray[i].name + ', id = ' + skillsArray[i].id;
-                    //option.text = skillsArray[i].name + '<a href="/deleteSkill">delete</a>';
                     selectList.appendChild(option);
                 }
 
@@ -257,17 +199,7 @@ function getSkills() {
     statusElem.innerHTML = 'Ожидаю ответа сервера...'
 }
 
-/*
-function newSkillw(data) {
-    //console.log("here is my skill ============= " + data.value);
-    if (data.value == "new skill") {
-        var newSkill = prompt('Enter new skill', '');
-    }
-}
-*/
-
 // javascript-код голосования из примера
-//function newSkill(data, skillNumber) {
 function newSkill(data) {
     if (data.value == "-1") {
         var newSkill = prompt('Enter new skill', '');

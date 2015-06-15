@@ -3,14 +3,15 @@
 # ~~~~
 
 # Home page
-GET        /                        controllers.Application.index()
-GET        /indexApp                controllers.Application.indexApplicants()
+#GET        /                        controllers.Application.index()
+GET        /                controllers.Application.indexApplicants()
+#GET        /indexApp                controllers.Application.indexApplicants()
 
 # Map static resources from the /public folder to the /assets URL path
 
 GET        /assets/*file            controllers.Assets.at(path="/public", file)
 
-GET        /search                  controllers.Application.list()
+#GET        /search                  controllers.Application.list()
 
 GET        /searchApplicants        controllers.Application.listApplicants()
 GET        /addSkill                controllers.Application.addSkill()

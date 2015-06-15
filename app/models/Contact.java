@@ -16,6 +16,7 @@ import com.avaje.ebean.*;
 public class Contact extends Model {
 
 	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
 
 	@Constraints.Required
