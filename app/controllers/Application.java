@@ -184,7 +184,6 @@ public class Application extends Controller {
     }
 
     public static Result deleteApplicant(int id) {
-        System.out.println("id = " + id);
             Applicant applicant = Applicant.find.byId(id);
             List<Rating> ratingsList = Ebean.find(Rating.class)
                     .where()
@@ -256,12 +255,9 @@ public class Application extends Controller {
         try {
             applicant.dateInterview = ft.parse(values.get("dateInterview")[0]);
         } catch (ParseException e) {
-//            System.out.println("Unparseable using " + ft);
         }
-//        System.out.println("date interview = " + applicant.dateInterview);
         applicant.save();
         for (Map.Entry<String, String[]> entry : values.entrySet()) {
-//            System.out.println("key = " + entry.getKey() + ", value = " +entry.getValue()[0]);
             if (entry.getKey().startsWith("contactNameId")) {
                 int start = entry.getKey().indexOf('-') + 1;
                 Contact contact = new Contact(

@@ -157,11 +157,8 @@ function deleteApplicant(idApplicant) {
     var r = confirm("Are you shure!");
     if (r == true) {
         var req = getXmlHttp();
-        console.log('ok1');
         req.onreadystatechange = function () {};
-        console.log('ok2');
         req.open('GET', '/applicants/delete/' + idApplicant, true);
-        console.log('ok3');
         req.send(null);
         var oTable1 = $('#contacts').dataTable();
         oTable1.fnStandingRedraw();
@@ -206,7 +203,6 @@ function getSkills() {
                 option.value = -1;
                 option.text = 'new skill';
                 selectList.appendChild(option);
-                console.log("in add = " + req.responseText);
                 var skillsArray = JSON.parse(req.responseText).skills;
                 for (var i = 0; i < skillsArray.length; i++) {
                     var option = document.createElement("option");
@@ -260,7 +256,6 @@ function getContacts() {
                 option.value = -1;
                 option.text = 'new contact';
                 selectList.appendChild(option);
-                //console.log("in add = " + req.responseText);
                 var typeContactsArray = JSON.parse(req.responseText).typeContacts;
                 for (var i = 0; i < typeContactsArray .length; i++) {
                     var option = document.createElement("option");
@@ -298,7 +293,6 @@ function newSkill(data) {
         req.send(null);
     } else {
         if (data.value > 0) {
-            console.log(document.getElementById('skillValueId-' + skillNumber));
             if (!document.getElementById('skillValueId-' + skillNumber)) {
                 var skillValue = document.createElement("input");
                 skillValue.type = 'number';
@@ -430,7 +424,6 @@ function loadApplicant(message) {
                         selectList.appendChild(option);
 
                         var skillsArray = JSON.parse(req.responseText).skills;
-                        //console.log('ddd = '+req.responseText);
                         for (var a = 0; a < skillsArray.length; a++) {
                             var option = document.createElement("option");
                             option.value = skillsArray[a].id;
@@ -475,7 +468,6 @@ function loadApplicant(message) {
                     var ownContactsArray = message.contacts;
                     for (var i = 0; i < ownContactsArray.length; i++) {
                         var option = document.createElement("option");
-                        //console.log('skill = ' + ownSkillsArray[i].skill + ', rating ' + ownSkillsArray[i].rating + ', id skill = ' + ownSkillsArray[i].id);
 
                         var fieldset = document.createElement("fieldset");
                         fieldset.setAttribute("id", "contactFieldsetId-" + (++contactNumber));
