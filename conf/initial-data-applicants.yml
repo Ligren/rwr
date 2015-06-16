@@ -300,7 +300,7 @@ typeContacts:
 
     - !!models.TypeContact
         id:     6
-        name:   Πελόρΰ
+        name:   Π ΠµΠ»ΡΡΠ°
 
 contacts:
 
@@ -341,5 +341,85 @@ contacts:
         value:  097999-56-37
         owner: !!models.Applicant
                         id: 2
+        typeContact: !!models.TypeContact
+                        id: 6
+
+    - !!models.Contact
+        id:     6
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 3
+        typeContact: !!models.TypeContact
+                        id: 6
+
+    - !!models.Contact
+        id:     7
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 4
+        typeContact: !!models.TypeContact
+                        id: 6
+
+    - !!models.Contact
+        id:     8
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 5
+        typeContact: !!models.TypeContact
+                        id: 6
+    - !!models.Contact
+        id:     9
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 6
+        typeContact: !!models.TypeContact
+                        id: 6
+    - !!models.Contact
+        id:     10
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 7
+        typeContact: !!models.TypeContact
+                        id: 6
+    - !!models.Contact
+        id:     11
+        value:  6666666666
+        owner: !!models.Applicant
+                        id: 8
+        typeContact: !!models.TypeContact
+                        id: 6
+    - !!models.Contact
+        id:     12
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 9
+        typeContact: !!models.TypeContact
+                        id: 6
+    - !!models.Contact
+        id:     13
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 10
+        typeContact: !!models.TypeContact
+                        id: 6
+    - !!models.Contact
+        id:     14
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 11
+        typeContact: !!models.TypeContact
+                        id: 6
+    - !!models.Contact
+        id:     15
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 12
+        typeContact: !!models.TypeContact
+                        id: 6
+    - !!models.Contact
+        id:     16
+        value:  097999-56-37
+        owner: !!models.Applicant
+                        id: 13
         typeContact: !!models.TypeContact
                         id: 6

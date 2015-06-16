@@ -46,11 +46,16 @@ public class Application extends Controller {
         String order = params.get("order[0][dir]")[0];
 
         switch (Integer.valueOf(params.get("order[0][column]")[0])) {
-            case 0: sortBy = "name"; break;
-            case 1: sortBy = "dateAddition"; break;
-            case 2: sortBy = "dateInterview"; break;
+            case 0:
+                sortBy = "name";
+                break;
+            case 1:
+                sortBy = "dateAddition";
+                break;
+            case 2:
+                sortBy = "dateInterview";
+                break;
         }
-        System.out.println("sort by (string) after case = " + sortBy);
 
         /**
          * Get page to show from database
@@ -61,7 +66,6 @@ public class Application extends Controller {
         List<Applicant> resultList = new ArrayList<Applicant>();
         String[] r = divide(filter);
         for (int i = 0; i < r.length; i++) {
-            System.out.println("в цикле = " + r[i] + '+');
             filter = r[i];
 
             //создаем переменную с названием contactsPage ссылочного типа Page (типа Contact) и присваиваем ей значение, которое возвращает метод find вызванный у Contact
@@ -69,7 +73,10 @@ public class Application extends Controller {
 
                     Expr.or(
                             Expr.ilike("name", "%" + filter + "%"), //ищем в name
-                            Expr.ilike("ratings.skill.name", "%" + filter + "%")
+                            Expr.or(
+                                    Expr.ilike("ratings.skill.name", "%" + filter + "%"),
+                                    Expr.ilike("contacts.value", "%" + filter + "%")
+                            )
                     )
             )
                     .orderBy(sortBy + " " + order + ", id " + order) //сортируем
@@ -89,7 +96,6 @@ public class Application extends Controller {
             }
         }
         Integer iTotalDisplayRecords = resultList.size();
-        System.out.println("iTotalDisplayRecords (int) кол-во найденных значений = " + iTotalDisplayRecords);
 
         /**
          * Construct the JSON to return
@@ -111,7 +117,6 @@ public class Application extends Controller {
 
         String skillName;
         Integer skillRating;
-        System.out.println("results: " + sortedRatings);
         for (Applicant c : resultList) { //получили лист контактов, которые должны выводится на странице, и перебираем его результаты
             ObjectNode row = Json.newObject(); //создаем новый JSON с именем row и ложим в него результаты нашего поиска
             row.put("name", c.name);
@@ -119,14 +124,11 @@ public class Application extends Controller {
             row.put("dateAddition", dateFormat.format(c.dateAddition));
             row.put("id", c.id);
 
-            System.out.println("name = " + c.name + ", id = " + c.id + ", skills = " + c.ratings);
 
             for (Rating s : c.ratings) ratings.put("" + s.skill, s.value);
-            System.out.println("ratings = " + ratings);
 
             if (!ratings.isEmpty()) {
                 sortedRatings.putAll(ratings);
-                System.out.println("ratings = " + sortedRatings);
 
                 skillName = (String) sortedRatings.keySet().toArray()[0];
                 skillRating = ratings.get(skillName);
@@ -154,13 +156,11 @@ public class Application extends Controller {
     }
 
     public static Result editApplicant(int id) {
-//        System.out.println("id in controller = " + id);
         Applicant applicant = Applicant.find.byId(id);
         ObjectNode result = Json.newObject();
 
         result.put("name", applicant.name);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//            row.put("dateInterview", dateFormat.format(c.dateInterview));
 
         result.put("dateInterview", dateFormat.format(applicant.dateInterview));
         ArrayNode contacts = result.putArray("contacts");
@@ -168,35 +168,31 @@ public class Application extends Controller {
 
         for (Contact c : applicant.contacts) {
             ObjectNode row = Json.newObject();
-            row.put("contact", "" + c.typeContact.name);
             row.put("value", "" + c.value);
-            row.put("id", "" + c.id);
+            row.put("id", "" + c.typeContact.id);
             contacts.add(row);
         }
         for (Rating r : applicant.ratings) {
             ObjectNode row = Json.newObject();
-            row.put("skill", "" + r.skill);
             row.put("rating", "" + r.value);
             row.put("id", "" + r.skill.id);
             ratings.add(row);
         }
 
-        System.out.println("our JSON = " + result.toString());
 
         return ok(edit.render(result.toString()));
     }
 
     public static Result deleteApplicant(int id) {
-        Map<String, String[]> params = request().queryString();
-        System.out.println("params (map) = " + params);
-        Applicant applicant = Applicant.find.byId(id);
-        List<Rating> ratingsList = Ebean.find(Rating.class)
-                .where()
-                .eq("owner", applicant)
-                .findList();
-        for (Rating r:ratingsList) r.delete();
-        applicant.delete();
-        return indexApplicants();
+        System.out.println("id = " + id);
+            Applicant applicant = Applicant.find.byId(id);
+            List<Rating> ratingsList = Ebean.find(Rating.class)
+                    .where()
+                    .eq("owner", applicant)
+                    .findList();
+            for (Rating r : ratingsList) r.delete();
+            applicant.delete();
+        return ok();
     }
 
     public static Result newApplicant() {
@@ -237,7 +233,7 @@ public class Application extends Controller {
 
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         List<Applicant> applicantsList = Applicant.find.where().ilike("name", values.get("name")[0]).findList();
-        SimpleDateFormat ft = new SimpleDateFormat ("dd/MM/yyyy");
+        SimpleDateFormat ft = new SimpleDateFormat("dd/MM/yyyy");
         Applicant applicant;
 
         if (applicantsList.isEmpty()) {
@@ -246,22 +242,37 @@ public class Application extends Controller {
         } else {
             applicant = applicantsList.get(0);
             List<Rating> ratingsList = Ebean.find(Rating.class)
-                            .where()
-                            .eq("owner", applicant)
-                            .findList();
-            for (Rating r:ratingsList) r.delete();
+                    .where()
+                    .eq("owner", applicant)
+                    .findList();
+            for (Rating r : ratingsList) r.delete();
+            List<Contact> contactsList = Ebean.find(Contact.class)
+                    .where()
+                    .eq("owner", applicant)
+                    .findList();
+            for (Contact c : contactsList) c.delete();
         }
 
         try {
             applicant.dateInterview = ft.parse(values.get("dateInterview")[0]);
         } catch (ParseException e) {
-            System.out.println("Unparseable using " + ft);
+//            System.out.println("Unparseable using " + ft);
         }
-        System.out.println("date interview = " + applicant.dateInterview);
+//        System.out.println("date interview = " + applicant.dateInterview);
         applicant.save();
         for (Map.Entry<String, String[]> entry : values.entrySet()) {
-            if (entry.getKey().startsWith("skillNameId")){
-            int start = entry.getKey().indexOf('-') + 1;
+//            System.out.println("key = " + entry.getKey() + ", value = " +entry.getValue()[0]);
+            if (entry.getKey().startsWith("contactNameId")) {
+                int start = entry.getKey().indexOf('-') + 1;
+                Contact contact = new Contact(
+                        TypeContact.find.byId(Integer.parseInt(entry.getValue()[0])),
+                        values.get("contactValueName-" + entry.getKey().substring(start))[0],
+                        applicant
+                );
+                contact.save();
+            }
+            if (entry.getKey().startsWith("skillNameId")) {
+                int start = entry.getKey().indexOf('-') + 1;
                 Rating rating = new Rating(
                         Skill.find.byId(Integer.parseInt(entry.getValue()[0])),
                         Integer.parseInt(values.get("skillValueName-" + entry.getKey().substring(start))[0]),
@@ -279,10 +290,10 @@ public class Application extends Controller {
 
         List<Skill> skills = Skill.find.all();
 
-        for (Skill s:skills) {
+        for (Skill s : skills) {
             ObjectNode row = Json.newObject();
-            row.put("id", ""+s.id);
-            row.put("name", ""+s.name);
+            row.put("id", "" + s.id);
+            row.put("name", "" + s.name);
             skillArray.add(row);
         }
         return ok(result);
@@ -294,10 +305,10 @@ public class Application extends Controller {
 
         List<TypeContact> typeContacts = TypeContact.find.all();
 
-        for (TypeContact s:typeContacts) {
+        for (TypeContact s : typeContacts) {
             ObjectNode row = Json.newObject();
-            row.put("id", ""+s.id);
-            row.put("name", ""+s.name);
+            row.put("id", "" + s.id);
+            row.put("name", "" + s.name);
             typeContactsArray.add(row);
         }
         return ok(result);
@@ -327,6 +338,7 @@ public class Application extends Controller {
 class ValueComparator implements Comparator<String> {
 
     Map<String, Integer> base;
+
     public ValueComparator(Map<String, Integer> base) {
         this.base = base;
     }

@@ -10,7 +10,6 @@ var skillNumber = 0;
 var contactNumber = 0;
 
 $(function() {
-    //$( ".datepicker" ).datepicker({ dateFormat: "dd-mm-yy" });
     $( ".datepicker" ).datepicker({ dateFormat: "dd/mm/yy" });
 });
 
@@ -76,7 +75,8 @@ $(document).ready(function () {
                 "bSortable": false,
                 "sDefaultContent": "reference",
                 "mRender": function (data, type, row) {
-                    return "<a href='/applicants/delete/" + row.id + "'>Delete</a>"
+                    return "<a onclick='deleteApplicant(" + row.id + ")' href='javascript:void(0);'>Delete</a>";
+                    //return "<a href='/applicants/delete/" + row.id + "'>Delete</a>"
                 }
             }
         ]
@@ -134,6 +134,42 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     }
 });
 
+
+$.fn.dataTableExt.oApi.fnStandingRedraw = function(oSettings) {
+    //redraw to account for filtering and sorting
+    // concept here is that (for client side) there is a row got inserted at the end (for an add)
+    // or when a record was modified it could be in the middle of the table
+    // that is probably not supposed to be there - due to filtering / sorting
+    // so we need to re process filtering and sorting
+    // BUT - if it is server side - then this should be handled by the server - so skip this step
+
+    //if(oSettings.oFeatures.bServerSide === false){
+        var before = oSettings._iDisplayStart;
+        oSettings.oApi._fnReDraw(oSettings);
+        //iDisplayStart has been reset to zero - so lets change it back
+        oSettings._iDisplayStart = before;
+        oSettings.oApi._fnCalculateEnd(oSettings);
+    //}
+
+    //draw the 'current' page
+    oSettings.oApi._fnDraw(oSettings);
+};
+
+function deleteApplicant(idApplicant) {
+    var r = confirm("Are you shure!");
+    if (r == true) {
+        var req = getXmlHttp();
+        console.log('ok1');
+        req.onreadystatechange = function () {};
+        console.log('ok2');
+        req.open('GET', '/applicants/delete/' + idApplicant, true);
+        console.log('ok3');
+        req.send(null);
+        var oTable1 = $('#contacts').dataTable();
+        oTable1.fnStandingRedraw();
+    }
+}
+
 function getSkills() {
     var req = getXmlHttp();
 
@@ -159,7 +195,7 @@ function getSkills() {
                 myDiv.appendChild(fieldset);
 
                 var selectList = document.createElement("select");
-                selectList.id = skillNumber;
+                selectList.id = 'skill-' + skillNumber;
                 selectList.name = "skillNameId-" + skillNumber;
                 selectList.setAttribute("onchange", "newSkill(this)");
 
@@ -202,10 +238,8 @@ function getSkills() {
 
 function getContacts() {
     var req = getXmlHttp();
-    var statusElem = document.getElementById('vote_status')
     req.onreadystatechange = function () {
         if (req.readyState == 4) {
-            statusElem.innerHTML = req.statusText
             if (req.status == 200) {
 
                 var fieldset = document.createElement("fieldset");
@@ -243,18 +277,14 @@ function getContacts() {
     }
     req.open('GET', '/getTypeContacts', true);
     req.send(null);  // отослать запрос
-    statusElem.innerHTML = 'Ожидаю ответа сервера...'
 }
 
 function newSkill(data) {
     if (data.value == "-1") {
         var newSkill = prompt('Enter new skill', '');
         var req = getXmlHttp();
-        var statusElem = document.getElementById('vote_status')
-
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
-                statusElem.innerHTML = req.statusText // показать статус (Not Found, ОК..)
                 if (req.status == 200) {
                     if (JSON.parse(req.responseText).createNewSkill === "true") {
                         alert("Навык: " + newSkill + " Успешно добавлен !");
@@ -268,7 +298,6 @@ function newSkill(data) {
         }
         req.open('GET', '/addSkill?newSkill=' + newSkill, true);
         req.send(null);
-        statusElem.innerHTML = 'Ожидаю ответа сервера...';
     } else {
         if (data.value > 0) {
             console.log(document.getElementById('skillValueId-' + skillNumber));
@@ -299,11 +328,9 @@ function newContact(data) {
     if (data.value == "-1") {
         var newContact = prompt('Enter new type contact', '');
         var req = getXmlHttp();
-        //var statusElem = document.getElementById('vote_status')
 
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
-                //statusElem.innerHTML = req.statusText // показать статус (Not Found, ОК..)
                 if (req.status == 200) {
                     if (JSON.parse(req.responseText).createNewTypeContact == "true") {
                         alert("Тип контакта: " + newContact + " Успешно добавлен !");
@@ -316,19 +343,13 @@ function newContact(data) {
         }
         req.open('GET', '/addTypeContact?newTypeContact=' + newContact, true);
         req.send(null);
-        statusElem.innerHTML = 'Ожидаю ответа сервера...';
     } else {
         if (data.value > 0) {
-            console.log(document.getElementById('contactValueId-' + contactNumber));
             if (!document.getElementById('contactValueId-' + contactNumber)) {
                 var typeContactValue = document.createElement("input");
                 typeContactValue.type = 'text';
-                //typeContactValue.value = 5;
                 typeContactValue.name = 'contactValueName-' + contactNumber;
                 typeContactValue.id = 'contactValueId-' + contactNumber;
-                //typeContactValue.min = 0;
-                //typeContactValue.max = 10;
-                //typeContactValue.step = 1;
                 var selectList = document.getElementById("contactFieldsetId-" + contactNumber);
                 selectList.appendChild(typeContactValue);
 
@@ -388,7 +409,7 @@ function loadApplicant(message) {
                     var ownSkillsArray = message.ratings;
                     for (var i = 0; i < ownSkillsArray.length; i++) {
                         var option = document.createElement("option");
-                        console.log('skill = ' + ownSkillsArray[i].skill + ', rating ' + ownSkillsArray[i].rating + ', id skill = ' + ownSkillsArray[i].id);
+                        //console.log('skill = ' + ownSkillsArray[i].skill + ', rating ' + ownSkillsArray[i].rating + ', id skill = ' + ownSkillsArray[i].id);
 
                         var fieldset = document.createElement("fieldset");
                         fieldset.setAttribute("id", "skillFieldsetId-" + (++skillNumber));
@@ -397,7 +418,7 @@ function loadApplicant(message) {
                         myDiv.appendChild(fieldset);
 
                         var selectList = document.createElement("select");
-                        selectList.id = skillNumber;
+                        selectList.id = 'skill-' + skillNumber;
                         selectList.name = "skillNameId-" + skillNumber;
                         selectList.setAttribute("onchange", "newSkill(this)");
 
@@ -412,6 +433,7 @@ function loadApplicant(message) {
                         selectList.appendChild(option);
 
                         var skillsArray = JSON.parse(req.responseText).skills;
+                        //console.log('ddd = '+req.responseText);
                         for (var a = 0; a < skillsArray.length; a++) {
                             var option = document.createElement("option");
                             option.value = skillsArray[a].id;
@@ -420,7 +442,7 @@ function loadApplicant(message) {
                         }
                         fieldset.appendChild(selectList);
 
-                        document.getElementById(skillNumber).value = ownSkillsArray[i].id;
+                        document.getElementById('skill-' + skillNumber).value = ownSkillsArray[i].id;
 
                         var skillValue = document.createElement("input");
                         skillValue.type = 'number';
@@ -430,10 +452,11 @@ function loadApplicant(message) {
                         skillValue.min = 0;
                         skillValue.max = 10;
                         skillValue.step = 1;
+                        skillValue.value = ownSkillsArray[i].rating;
                         var selectList = document.getElementById("skillFieldsetId-" + skillNumber);
                         selectList.appendChild(skillValue);
 
-                        document.getElementById('skillValueId-' + skillNumber).value = ownSkillsArray[i].rating;
+                        //document.getElementById('skillValueId-' + skillNumber).value = ownSkillsArray[i].rating;
 
                         var buttonDelete = document.createElement("input");
                         buttonDelete.type = "button";
@@ -449,4 +472,69 @@ function loadApplicant(message) {
         req.open('GET', '/getSkills', true);
         req.send(null);
     }
+    var req2 = getXmlHttp();
+        req2.onreadystatechange = function () {
+            if (req2.readyState == 4) {
+                if (req2.status == 200) {
+
+                    var ownContactsArray = message.contacts;
+                    for (var i = 0; i < ownContactsArray.length; i++) {
+                        var option = document.createElement("option");
+                        //console.log('skill = ' + ownSkillsArray[i].skill + ', rating ' + ownSkillsArray[i].rating + ', id skill = ' + ownSkillsArray[i].id);
+
+                        var fieldset = document.createElement("fieldset");
+                        fieldset.setAttribute("id", "contactFieldsetId-" + (++contactNumber));
+
+                        var myDiv = document.getElementById("contact");
+                        myDiv.appendChild(fieldset);
+
+                        var selectList = document.createElement("select");
+                        selectList.id = 'contact-' + contactNumber;
+                        selectList.name = "contactNameId-" + contactNumber;
+                        selectList.setAttribute("onchange", "newContact(this)");
+
+                        var option = document.createElement("option");
+                        option.value = 0;
+                        option.text = 'select contact';
+                        selectList.appendChild(option);
+
+                        var option = document.createElement("option");
+                        option.value = -1;
+                        option.text = 'new contact';
+                        selectList.appendChild(option);
+
+                        var contactsArray = JSON.parse(req2.responseText).typeContacts;
+                        for (var a = 0; a < contactsArray.length; a++) {
+                            var option = document.createElement("option");
+                            option.value = contactsArray[a].id;
+                            option.text = contactsArray[a].name;
+                            selectList.appendChild(option);
+                        }
+                        fieldset.appendChild(selectList);
+
+                        document.getElementById('contact-' + contactNumber).value = ownContactsArray[i].id;
+
+                        var typeContactValue = document.createElement("input");
+                        typeContactValue.type = 'text';
+                        typeContactValue.name = 'contactValueName-' + contactNumber;
+                        typeContactValue.id = 'contactValueId-' + contactNumber;
+                        typeContactValue.value = ownContactsArray[i].value;
+                        var selectList = document.getElementById("contactFieldsetId-" + contactNumber);
+                        selectList.appendChild(typeContactValue);
+
+                        //document.getElementById('skillValueId-' + skillNumber).value = ownSkillsArray[i].rating;
+
+                        var buttonDelete = document.createElement("input");
+                        buttonDelete.type = "button";
+                        buttonDelete.name = contactNumber;
+                        buttonDelete.value = "Delete contact";
+                        buttonDelete.setAttribute("onclick", "deleteContact(" + contactNumber + ")");
+                        selectList.appendChild(buttonDelete);
+                    }
+                }
+            }
+        }
+        req2.open('GET', '/getTypeContacts', true);
+        req2.send(null);
+
 }

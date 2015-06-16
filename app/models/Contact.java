@@ -28,20 +28,18 @@ public class Contact extends Model {
 	@ManyToOne
 	public Applicant owner;
 
-//	public String name;
+	public Contact() { }
 
-//	public String title;
-//	public String email;
+	public Contact(TypeContact typeContact, String value, Applicant owner) {
+		this.typeContact = typeContact;
+		this.value = value;
+		this.owner = owner;
+	}
 
 	public static Model.Finder<Long,Contact> find = new Model.Finder(Long.class, Contact.class);
 
 	public static List<Contact> findAll() {
 		return find.all();
 	}
-
-//	public String toString() {
-//		return ;
-//	}
-
 
 }
