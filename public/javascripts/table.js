@@ -28,7 +28,6 @@ $(document).ready(function () {
     $('#contacts').dataTable({
         processing: true,
         serverSide: true,
-        //bProcessing: true,
         aLengthMenu: [[10, 20, 50, 75, -1], [10, 20, 50, 75, "All"]],
         iDisplayLength: 20,
         ajax: "/searchApplicants",
@@ -76,7 +75,6 @@ $(document).ready(function () {
                 "sDefaultContent": "reference",
                 "mRender": function (data, type, row) {
                     return "<a onclick='deleteApplicant(" + row.id + ")' href='javascript:void(0);'>Delete</a>";
-                    //return "<a href='/applicants/delete/" + row.id + "'>Delete</a>"
                 }
             }
         ]
@@ -409,7 +407,6 @@ function loadApplicant(message) {
                     var ownSkillsArray = message.ratings;
                     for (var i = 0; i < ownSkillsArray.length; i++) {
                         var option = document.createElement("option");
-                        //console.log('skill = ' + ownSkillsArray[i].skill + ', rating ' + ownSkillsArray[i].rating + ', id skill = ' + ownSkillsArray[i].id);
 
                         var fieldset = document.createElement("fieldset");
                         fieldset.setAttribute("id", "skillFieldsetId-" + (++skillNumber));
@@ -455,8 +452,6 @@ function loadApplicant(message) {
                         skillValue.value = ownSkillsArray[i].rating;
                         var selectList = document.getElementById("skillFieldsetId-" + skillNumber);
                         selectList.appendChild(skillValue);
-
-                        //document.getElementById('skillValueId-' + skillNumber).value = ownSkillsArray[i].rating;
 
                         var buttonDelete = document.createElement("input");
                         buttonDelete.type = "button";
@@ -522,8 +517,6 @@ function loadApplicant(message) {
                         var selectList = document.getElementById("contactFieldsetId-" + contactNumber);
                         selectList.appendChild(typeContactValue);
 
-                        //document.getElementById('skillValueId-' + skillNumber).value = ownSkillsArray[i].rating;
-
                         var buttonDelete = document.createElement("input");
                         buttonDelete.type = "button";
                         buttonDelete.name = contactNumber;
@@ -536,5 +529,4 @@ function loadApplicant(message) {
         }
         req2.open('GET', '/getTypeContacts', true);
         req2.send(null);
-
 }
